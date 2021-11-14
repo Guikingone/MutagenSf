@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  php:
+    build:
+      context: .cloud/docker/php
+    volumes:
+      - ./:/srv/app
+
+  nginx:
+    build:
+      context: .cloud/docker/nginx
+    volumes:
+      - ./:/srv/app
+      - .cloud/docker/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+      - .cloud/docker/nginx/conf/default.conf:/etc/nginx/sites-available/mutagen.conf
+      - .cloud/docker/nginx/conf/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - php
+    ports:
+      - '80:80'
